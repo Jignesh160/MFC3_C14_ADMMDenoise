@@ -72,7 +72,7 @@ This project is interesting because it:
 The denoising problem is formulated as:
 
 $$
-\min_{Z, X} |Z|** + \lambda |X|*{2,1} \quad \text{subject to} \quad D = Z + X
+\min_{Z, X} |Z| + \lambda |X|*{2,1} \quad \text{subject to} \quad D = Z + X
 $$
 
 where
