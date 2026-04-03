@@ -267,7 +267,6 @@ This project implements an image denoising algorithm using the S-ADMM framework.
 
 * `s_admm_2.mlx` : MATLAB implementation
 * `results/` : Output images and plots
-* `docs/` : Report / presentation
 * `README.md` : Documentation
 
 ---
