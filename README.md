@@ -38,7 +38,7 @@ where:
 ### Optimization Problem
 
 $$
-\min_{Z, X} \ |Z|** + \lambda |X|*{2,1} \quad \text{subject to} \quad D = Z + X
+\min_{Z, X} |Z|** + \lambda |X|*{2,1} \quad \text{subject to} \quad D = Z + X
 $$
 
 where:
@@ -52,12 +52,8 @@ where:
 ### Augmented Lagrangian
 
 $$
-\mathcal{L}(Z, X, Y) =
-|Z|** + \lambda |X|*{2,1}
-
-* \langle Y, D - Z - X \rangle
-* \frac{\gamma}{2} |D - Z - X|_F^2
-  $$
+\mathcal{L}(Z, X, Y) = |Z|** + \lambda |X|*{2,1} + \langle Y, D - Z - X \rangle + \frac{\gamma}{2} |D - Z - X|_F^2
+$$
 
 where:
 
@@ -120,9 +116,9 @@ This adaptive update improves convergence speed and stability.
 
 ## Intuition
 
-* The low-rank term captures the structured content of the image
+* The low-rank term captures structured image content
 * The sparse term isolates noise and outliers
-* ADMM splits the problem into simpler subproblems
+* ADMM splits the optimization into simpler subproblems
 * Adaptive $\gamma$ ensures efficient convergence
 
 ---
