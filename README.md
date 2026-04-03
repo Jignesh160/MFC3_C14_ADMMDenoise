@@ -2,9 +2,9 @@
 
 ## Overview
 
-This project presents an optimization-based approach for image denoising using the Self-Adaptive Alternating Direction Method of Multipliers (S-ADMM). The method models a noisy image as the sum of a low-rank component and a sparse component, enabling effective separation of structure and noise.
+This project presents an optimization-based framework for image denoising using the Self-Adaptive Alternating Direction Method of Multipliers (S-ADMM). The method decomposes a noisy image into a low-rank component representing the clean image and a sparse component representing noise.
 
-The adaptive update of the penalty parameter improves convergence behavior and enhances reconstruction performance.
+The adaptive update of the penalty parameter improves convergence and enhances reconstruction performance.
 
 ---
 
@@ -12,8 +12,8 @@ The adaptive update of the penalty parameter improves convergence behavior and e
 
 * Implement an image denoising algorithm based on ADMM
 * Apply low-rank and sparse decomposition techniques
-* Analyze convergence using iterative error metrics
-* Evaluate performance using standard image quality measures
+* Analyze convergence behavior
+* Evaluate performance using standard image quality metrics
 
 ---
 
@@ -27,29 +27,113 @@ D = Z + X
 
 where:
 
-* (D) is the noisy image
-* (Z) is the low-rank approximation (denoised image)
-* (X) is the sparse noise component
+* (D): noisy image
+* (Z): low-rank (clean) image
+* (X): sparse noise
 
 ---
 
-## Methodology
+## Mathematical Formulation and Derivation
 
-The algorithm follows an iterative optimization framework:
+### Optimization Problem
 
-1. Apply Singular Value Thresholding (SVT) to estimate the low-rank component
-2. Apply column-wise (\ell_{2,1}) norm shrinkage to estimate sparse noise
-3. Update the dual variable
-4. Adaptively update the penalty parameter (\gamma)
-5. Repeat until convergence
+The denoising task is formulated as:
+
+[
+\min_{Z, X} \ |Z|** + \lambda |X|*{2,1} \quad \text{subject to} \quad D = Z + X
+]
+
+where:
+
+* ( |Z|_* ): nuclear norm promoting low-rank structure
+* ( |X|_{2,1} ): column-wise sparsity norm
+* ( \lambda ): regularization parameter
+
+---
+
+### Augmented Lagrangian
+
+[
+\mathcal{L}(Z, X, Y) =
+|Z|** + \lambda |X|*{2,1}
+
+* \langle Y, D - Z - X \rangle
+* \frac{\gamma}{2} |D - Z - X|_F^2
+  ]
+
+where:
+
+* (Y): dual variable
+* (\gamma): penalty parameter
+
+---
+
+### ADMM Updates
+
+#### 1. Update (Z) (Low-rank component)
+
+[
+Z^{k+1} = \arg\min_Z \ |Z|_* + \frac{\gamma}{2} |Z - A|_F^2
+]
+
+Solution via Singular Value Thresholding (SVT):
+
+[
+Z^{k+1} = U , \text{diag}(\max(\sigma - \tfrac{1}{\gamma}, 0)) , V^T
+]
+
+---
+
+#### 2. Update (X) (Sparse component)
+
+[
+X^{k+1} = \arg\min_X \ \lambda |X|_{2,1} + \frac{\gamma}{2} |X - B|_F^2
+]
+
+Solution via column-wise shrinkage:
+
+[
+X_i = \max\left(1 - \frac{\lambda}{\gamma |B_i|_2}, 0\right) B_i
+]
+
+---
+
+#### 3. Dual Variable Update
+
+[
+Y^{k+1} = Y^k + \gamma (D - Z^{k+1} - X^{k+1})
+]
+
+---
+
+### Self-Adaptive Parameter Update
+
+[
+\gamma =
+\begin{cases}
+(1+\rho)\gamma, & \text{if ratio} > 1+\rho \
+\gamma/(1+\rho), & \text{if ratio} < \frac{1}{1+\rho}
+\end{cases}
+]
+
+This adaptive mechanism improves convergence speed and stability.
+
+---
+
+## Intuition Behind the Method
+
+* The low-rank term captures structured image content
+* The sparse term isolates noise and outliers
+* ADMM splits the optimization into simpler subproblems
+* Adaptive parameter tuning ensures efficient convergence
 
 ---
 
 ## Dataset
 
 * BSDS500 dataset
-* Images are converted to grayscale and normalized to the range ([0,1])
-* Synthetic Gaussian noise is added for evaluation
+* Images converted to grayscale and normalized to ([0,1])
+* Synthetic Gaussian noise added
 
 ---
 
@@ -86,7 +170,7 @@ MFC3_C14_ADMMDenoise/
 
 ### Visual Outputs
 
-The following outputs are generated and stored in the `results/` directory:
+The following outputs are available in the `results/` directory:
 
 * Original image
 * Noisy image
@@ -100,7 +184,7 @@ The following outputs are generated and stored in the `results/` directory:
 
 ## Discussion
 
-The algorithm successfully separates the low-rank structure from sparse noise. The convergence trend indicates stable optimization behavior. However, the PSNR and SSIM values suggest that reconstruction quality can be further improved through parameter tuning or enhanced computational methods.
+The algorithm successfully separates the low-rank structure from sparse noise. Convergence behavior is stable as observed from the MSE curve. However, reconstruction quality can be further improved through parameter tuning or more efficient numerical techniques.
 
 ---
 
@@ -112,12 +196,12 @@ The algorithm successfully separates the low-rank structure from sparse noise. T
    ```
    s_admm_2.mlx
    ```
-3. Update the image path in the script:
+3. Update the image path:
 
    ```matlab
    I = imread('your_image_path.jpg');
    ```
-4. Run all sections sequentially
+4. Run all sections
 
 ---
 
@@ -132,9 +216,9 @@ The algorithm successfully separates the low-rank structure from sparse noise. T
 
 ## Future Work
 
-* Optimization of hyperparameters for improved performance
-* Use of randomized or truncated SVD for computational efficiency
-* Extension to video denoising applications
+* Hyperparameter tuning for improved PSNR and SSIM
+* Faster SVD using randomized or truncated methods
+* Extension to video denoising
 * GPU-based acceleration
 
 ---
