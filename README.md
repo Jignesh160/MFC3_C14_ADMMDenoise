@@ -21,15 +21,15 @@ The adaptive update of the penalty parameter improves convergence and enhances r
 
 The observed noisy image is modeled as:
 
-[
+$$
 D = Z + X
-]
+$$
 
 where:
 
-* (D): noisy image
-* (Z): low-rank (clean) image
-* (X): sparse noise
+* $D$ is the noisy image
+* $Z$ is the low-rank (clean) image
+* $X$ is the sparse noise
 
 ---
 
@@ -37,102 +37,100 @@ where:
 
 ### Optimization Problem
 
-The denoising task is formulated as:
-
-[
+$$
 \min_{Z, X} \ |Z|** + \lambda |X|*{2,1} \quad \text{subject to} \quad D = Z + X
-]
+$$
 
 where:
 
-* ( |Z|_* ): nuclear norm promoting low-rank structure
-* ( |X|_{2,1} ): column-wise sparsity norm
-* ( \lambda ): regularization parameter
+* $|Z|_*$ is the nuclear norm
+* $|X|_{2,1}$ enforces column sparsity
+* $\lambda$ is a regularization parameter
 
 ---
 
 ### Augmented Lagrangian
 
-[
+$$
 \mathcal{L}(Z, X, Y) =
 |Z|** + \lambda |X|*{2,1}
 
 * \langle Y, D - Z - X \rangle
 * \frac{\gamma}{2} |D - Z - X|_F^2
-  ]
+  $$
 
 where:
 
-* (Y): dual variable
-* (\gamma): penalty parameter
+* $Y$ is the dual variable
+* $\gamma$ is the penalty parameter
 
 ---
 
-### ADMM Updates
+## ADMM Updates
 
-#### 1. Update (Z) (Low-rank component)
+### 1. Update $Z$ (Low-rank component)
 
-[
-Z^{k+1} = \arg\min_Z \ |Z|_* + \frac{\gamma}{2} |Z - A|_F^2
-]
+$$
+Z^{k+1} = \arg\min_Z |Z|_* + \frac{\gamma}{2} |Z - A|_F^2
+$$
 
 Solution via Singular Value Thresholding (SVT):
 
-[
+$$
 Z^{k+1} = U , \text{diag}(\max(\sigma - \tfrac{1}{\gamma}, 0)) , V^T
-]
+$$
 
 ---
 
-#### 2. Update (X) (Sparse component)
+### 2. Update $X$ (Sparse component)
 
-[
-X^{k+1} = \arg\min_X \ \lambda |X|_{2,1} + \frac{\gamma}{2} |X - B|_F^2
-]
+$$
+X^{k+1} = \arg\min_X \lambda |X|_{2,1} + \frac{\gamma}{2} |X - B|_F^2
+$$
 
 Solution via column-wise shrinkage:
 
-[
+$$
 X_i = \max\left(1 - \frac{\lambda}{\gamma |B_i|_2}, 0\right) B_i
-]
+$$
 
 ---
 
-#### 3. Dual Variable Update
+### 3. Dual Variable Update
 
-[
+$$
 Y^{k+1} = Y^k + \gamma (D - Z^{k+1} - X^{k+1})
-]
+$$
 
 ---
 
 ### Self-Adaptive Parameter Update
 
-[
+$$
 \gamma =
 \begin{cases}
 (1+\rho)\gamma, & \text{if ratio} > 1+\rho \
 \gamma/(1+\rho), & \text{if ratio} < \frac{1}{1+\rho}
 \end{cases}
-]
+$$
 
-This adaptive mechanism improves convergence speed and stability.
+This adaptive update improves convergence speed and stability.
 
 ---
 
-## Intuition Behind the Method
+## Intuition
 
-* The low-rank term captures structured image content
+* The low-rank term captures the structured content of the image
 * The sparse term isolates noise and outliers
-* ADMM splits the optimization into simpler subproblems
-* Adaptive parameter tuning ensures efficient convergence
+* ADMM splits the problem into simpler subproblems
+* Adaptive $\gamma$ ensures efficient convergence
 
 ---
 
 ## Dataset
 
 * BSDS500 dataset
-* Images converted to grayscale and normalized to ([0,1])
+* Images converted to grayscale and normalized to $[0,1]$
 * Synthetic Gaussian noise added
 
 ---
@@ -170,7 +168,7 @@ MFC3_C14_ADMMDenoise/
 
 ### Visual Outputs
 
-The following outputs are available in the `results/` directory:
+Available in the `results/` folder:
 
 * Original image
 * Noisy image
@@ -178,25 +176,25 @@ The following outputs are available in the `results/` directory:
 * Extracted noise component
 * Absolute difference map
 * MSE convergence plot
-* Adaptive parameter ((\gamma)) evolution plot
+* Adaptive parameter ($\gamma$) evolution plot
 
 ---
 
 ## Discussion
 
-The algorithm successfully separates the low-rank structure from sparse noise. Convergence behavior is stable as observed from the MSE curve. However, reconstruction quality can be further improved through parameter tuning or more efficient numerical techniques.
+The method successfully separates low-rank image structure from sparse noise. Convergence behavior is stable, though quantitative metrics indicate that further parameter tuning could improve reconstruction quality.
 
 ---
 
 ## How to Run
 
 1. Open MATLAB
-2. Open the file:
+2. Open:
 
    ```
    s_admm_2.mlx
    ```
-3. Update the image path:
+3. Update image path:
 
    ```matlab
    I = imread('your_image_path.jpg');
