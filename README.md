@@ -1,60 +1,54 @@
-# MFC3_C14_ADMMDenoise
-
 # 📌 Sparse Image Denoising using Self-Adaptive ADMM (S-ADMM)
 
 ## 📖 Overview
 
-This project implements an advanced **image denoising algorithm** using the **Self-Adaptive Alternating Direction Method of Multipliers (S-ADMM)**.
+This project implements a **research-level optimization algorithm** for image denoising using the **Self-Adaptive Alternating Direction Method of Multipliers (S-ADMM)**.
 
-The method decomposes a noisy image into:
+The algorithm decomposes a noisy image into:
 
-* A **low-rank component (clean image)**
-* A **sparse component (noise)**
+* **Low-rank component (clean image)**
+* **Sparse component (noise)**
 
-The algorithm adaptively updates its internal parameters to improve convergence and denoising performance.
+It adaptively updates parameters to improve convergence and denoising performance.
 
 ---
 
 ## 🎯 Objectives
 
 * Remove noise from grayscale images using optimization techniques
-* Implement **Self-Adaptive ADMM**
-* Analyze convergence behavior using MSE and parameter evolution
+* Implement **Self-Adaptive ADMM (S-ADMM)**
+* Analyze convergence using MSE
 * Evaluate performance using PSNR and SSIM
 
 ---
 
 ## 🧠 Methodology
 
-The denoising model is based on:
+The denoising model is:
 
-$$
+[
 D = Z + X
-$$
+]
 
 Where:
 
 * (D): Noisy image
-* (Z): Low-rank clean image
+* (Z): Clean (low-rank) image
 * (X): Sparse noise
 
 ### Key Techniques:
 
-* **Singular Value Thresholding (SVT)** → Low-rank recovery 
-* **ℓ₂,₁ norm shrinkage** → Sparse noise estimation 
-* **Self-Adaptive ADMM** → Dynamic penalty parameter update
+* **Singular Value Thresholding (SVT)** → Low-rank recovery
+* **ℓ₂,₁ norm shrinkage** → Sparse noise extraction
+* **Adaptive γ update** → Improves convergence
 
 ---
 
 ## 📂 Dataset
 
-* Source: **BSDS500 Dataset**
-* Type: Natural images
-* Preprocessing:
-
-  * Converted to grayscale
-  * Normalized to [0,1]
-  * Synthetic Gaussian noise added
+* **BSDS500 Dataset**
+* Images converted to grayscale and normalized
+* Synthetic Gaussian noise added
 
 ---
 
@@ -66,72 +60,86 @@ Where:
 
 ---
 
-## 🚀 Implementation Steps
+## 🚀 Implementation
 
 1. Load and preprocess image
 2. Add Gaussian noise
 3. Initialize S-ADMM parameters
-4. Apply:
+4. Perform iterative updates:
 
    * SVT (low-rank approximation)
    * ℓ₂,₁ shrinkage (noise separation)
-5. Iteratively update:
-
-   * (Z), (X), (Y), and (\gamma)
+5. Adaptive update of penalty parameter (γ)
 6. Stop when convergence is reached
+
+---
+
+## 📁 Project Structure
+
+```
+MFC3_C14_ADMMDenoise/
+│
+├── s_admm_2.mlx        # Main MATLAB Live Script
+├── results/            # Output images & plots
+├── docs/               # Report / PPT
+└── README.md
+```
 
 ---
 
 ## 📊 Results
 
-The model produces:
+### 🔢 Quantitative Results
 
-* Denoised image (low-rank component)
-* Extracted noise (sparse component)
-* Convergence plots (MSE vs iteration)
-* Adaptive parameter evolution ((\gamma))
-
-### Metrics:
-
-* **MSE (↓ better)**
-* **PSNR (↑ better)**
-* **SSIM (≈1 best)**
+| Metric | Value    |
+| ------ | -------- |
+| MSE    | 0.029658 |
+| PSNR   | 15.28 dB |
+| SSIM   | 0.5040   |
 
 ---
 
-## 📈 Visual Outputs
+### 🖼️ Visual Results
+
+The following outputs are generated:
 
 * Original Image
 * Noisy Image
-* Recovered Clean Image
-* Noise Component
-* Error Map
-* Convergence Graph
+* Denoised Image
+* Extracted Noise
+* Difference Image
+* MSE Convergence Plot
 * Gamma Evolution Plot
+
+(All images are available in the `results/` folder)
 
 ---
 
 ## 🧪 How to Run
 
 1. Open MATLAB
-2. Update image path in code:
+2. Open:
 
 ```
+s_admm_2.mlx
+```
+
+3. Update image path:
+
+```matlab
 I = imread('your_image_path.jpg');
 ```
 
-3. Run the script:
-
-```
-run main_script.m
-```
+4. Run all sections
 
 ---
 
 ## 👥 Team Members
 
-* Jignesh Sudheer
-* (Add teammates)
+* **Jignesh Sudheer** — CB.SC.U4AIE24222
+* **Sharavn RM** — CB.SC.U4AIE24253
+* **Bhadhresh R** — CB.SC.U4AIE24208
+* **Gautham T** — CB.SC.U4AIE24264
 
 ---
 
@@ -139,15 +147,15 @@ run main_script.m
 
 * Week 1: Literature review
 * Week 2: Implementation
-* Week 3: Testing & analysis
+* Week 3: Testing & evaluation
 
 ---
 
 ## 🔮 Future Work
 
-* Use **randomized SVD** for faster computation
-* Extend to **video denoising**
-* Apply on **real-world noisy datasets**
+* Parameter tuning for improved PSNR and SSIM
+* Faster SVD using randomized methods
+* Extension to video denoising
 * GPU acceleration
 
 ---
