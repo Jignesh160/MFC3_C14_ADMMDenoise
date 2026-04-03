@@ -134,7 +134,7 @@ I = imread('your_image_path.jpg');
 
 ---
 
-## 👥 Team Members
+## 👥 Team Members-C14
 
 * **Jignesh Sudheer** — CB.SC.U4AIE24222
 * **Sharavn RM** — CB.SC.U4AIE24253
