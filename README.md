@@ -1,53 +1,101 @@
-# Sparse Image Denoising using Self-Adaptive ADMM (S-ADMM)
-
-## Overview
-
-This project presents an optimization-based framework for image denoising using the Self-Adaptive Alternating Direction Method of Multipliers (S-ADMM). The method decomposes a noisy image into a low-rank component representing the clean image and a sparse component representing noise.
-
-The adaptive update of the penalty parameter improves convergence and enhances reconstruction performance.
+# MFC3_C14_ADMMDenoise
 
 ---
 
-## Objectives
+# Project Title
 
-* Implement an image denoising algorithm based on ADMM
-* Apply low-rank and sparse decomposition techniques
-* Analyze convergence behavior
-* Evaluate performance using standard image quality metrics
+## Sparse Image Denoising using Self-Adaptive ADMM
 
 ---
 
-## Mathematical Model
+## Member Details
 
-The observed noisy image is modeled as:
+## Team C-14
+
+* **Jignesh Sudheer**
+  Roll No: CB.SC.U4AIE24222
+
+* **Sharavn RM**
+  Roll No: CB.SC.U4AIE24253
+
+* **Bhadhresh R**
+  Roll No: CB.SC.U4AIE24208
+
+* **Gautham T**
+  Roll No: CB.SC.U4AIE24264
+
+---
+
+## Introduction
+
+Images acquired in real-world scenarios are often corrupted by noise during acquisition and transmission. This noise degrades visual quality and affects further image processing tasks.
+
+The degradation model is given by:
 
 $$
 D = Z + X
 $$
 
-where:
+where
 
-* $D$ is the noisy image
-* $Z$ is the low-rank (clean) image
-* $X$ is the sparse noise
+* $Z$ : original clean image
+* $X$ : noise component
+* $D$ : observed noisy image
+
+Recovering the clean image from noisy observations is an inverse problem.
+
+This project solves the denoising problem using a **low-rank and sparse decomposition framework** optimized using **Self-Adaptive ADMM (S-ADMM)**.
 
 ---
 
-## Mathematical Formulation and Derivation
+## Objective
 
-### Optimization Problem
+The objective of this project is to implement an S-ADMM based image denoising algorithm that separates a noisy image into its low-rank (clean image) and sparse (noise) components. The algorithm is evaluated using standard image quality metrics such as MSE, PSNR, and SSIM.
+
+---
+
+## Motivation / Why the Project is Interesting
+
+Image denoising is a fundamental problem in image processing and computer vision. Traditional filtering methods often blur important details.
+
+This project is interesting because it:
+
+* Uses **optimization-based reconstruction**
+* Separates noise explicitly instead of smoothing
+* Applies **advanced ADMM framework**
+* Incorporates **adaptive parameter tuning**
+
+---
+
+## Mathematical Formulation
+
+The denoising problem is formulated as:
 
 $$
 \min_{Z, X} |Z|** + \lambda |X|*{2,1} \quad \text{subject to} \quad D = Z + X
 $$
 
-where:
+where
 
-* $|Z|_*$ is the nuclear norm
-* $|X|_{2,1}$ enforces column sparsity
-* $\lambda$ is a regularization parameter
+* $|Z|_*$ : nuclear norm promoting low-rank structure
+* $|X|_{2,1}$ : column sparsity norm
+* $\lambda$ : regularization parameter
 
 ---
+
+## Methodology
+
+### Mathematical Techniques Used
+
+* Low-rank matrix approximation
+* Nuclear norm minimization
+* $\ell_{2,1}$ norm sparsity
+* Alternating Direction Method of Multipliers (ADMM)
+* Singular Value Decomposition (SVD)
+
+---
+
+## ADMM Formulation
 
 ### Augmented Lagrangian
 
@@ -55,22 +103,17 @@ $$
 \mathcal{L}(Z, X, Y) = |Z|** + \lambda |X|*{2,1} + \langle Y, D - Z - X \rangle + \frac{\gamma}{2} |D - Z - X|_F^2
 $$
 
-where:
-
-* $Y$ is the dual variable
-* $\gamma$ is the penalty parameter
-
 ---
 
-## ADMM Updates
+## Derivation of Update Steps
 
-### 1. Update $Z$ (Low-rank component)
+### 1. Z-Update (Low-rank Component)
 
 $$
 Z^{k+1} = \arg\min_Z |Z|_* + \frac{\gamma}{2} |Z - A|_F^2
 $$
 
-Solution via Singular Value Thresholding (SVT):
+Using Singular Value Thresholding:
 
 $$
 Z^{k+1} = U , \text{diag}(\max(\sigma - \tfrac{1}{\gamma}, 0)) , V^T
@@ -78,13 +121,13 @@ $$
 
 ---
 
-### 2. Update $X$ (Sparse component)
+### 2. X-Update (Sparse Component)
 
 $$
 X^{k+1} = \arg\min_X \lambda |X|_{2,1} + \frac{\gamma}{2} |X - B|_F^2
 $$
 
-Solution via column-wise shrinkage:
+Column-wise shrinkage:
 
 $$
 X_i = \max\left(1 - \frac{\lambda}{\gamma |B_i|_2}, 0\right) B_i
@@ -100,7 +143,7 @@ $$
 
 ---
 
-### Self-Adaptive Parameter Update
+### 4. Adaptive Parameter Update
 
 $$
 \gamma =
@@ -110,117 +153,121 @@ $$
 \end{cases}
 $$
 
-This adaptive update improves convergence speed and stability.
+---
+
+## Working of the Algorithm
+
+* The noisy image is split into two components
+* The low-rank part captures structure
+* The sparse part captures noise
+* ADMM solves the problem iteratively
+* Adaptive $\gamma$ improves convergence
 
 ---
 
-## Intuition
+## Results & Discussion
 
-* The low-rank term captures structured image content
-* The sparse term isolates noise and outliers
-* ADMM splits the optimization into simpler subproblems
-* Adaptive $\gamma$ ensures efficient convergence
+## Evaluation Metrics
 
----
+Mean Squared Error:
 
-## Dataset
+$$
+MSE = \frac{1}{N}\sum (Z - Z_{rec})^2
+$$
 
-* BSDS500 dataset
-* Images converted to grayscale and normalized to $[0,1]$
-* Synthetic Gaussian noise added
+Peak Signal-to-Noise Ratio:
 
----
+$$
+PSNR = 10\log_{10}\frac{MAX^2}{MSE}
+$$
 
-## Implementation Details
-
-* Language: MATLAB
-* File: `s_admm_2.mlx`
-* Toolbox: Image Processing Toolbox
+Structural Similarity Index (SSIM) is also used.
 
 ---
 
-## Project Structure
+## Results Observed
 
-```
-MFC3_C14_ADMMDenoise/
-│
-├── s_admm_2.mlx
-├── results/
-├── docs/
-└── README.md
-```
+* Noise is effectively separated from the image
+* Denoised image preserves structure
+* Convergence is stable across iterations
+* Adaptive parameter improves performance
 
 ---
 
-## Results
+## Results and Plots
 
-### Quantitative Evaluation
+## Denoised Output
 
-| Metric | Value    |
-| ------ | -------- |
-| MSE    | 0.029658 |
-| PSNR   | 15.28 dB |
-| SSIM   | 0.5040   |
+![Denoised Image](results/denoised.png)
 
-### Visual Outputs
+## Noise Component
 
-Available in the `results/` folder:
+![Noise Image](results/noise.png)
 
-* Original image
-* Noisy image
-* Denoised image
-* Extracted noise component
-* Absolute difference map
-* MSE convergence plot
-* Adaptive parameter ($\gamma$) evolution plot
+## Difference Image
+
+![Difference](results/difference.png)
 
 ---
 
-## Discussion
+## Convergence Plots
 
-The method successfully separates low-rank image structure from sparse noise. Convergence behavior is stable, though quantitative metrics indicate that further parameter tuning could improve reconstruction quality.
-
----
-
-## How to Run
-
-1. Open MATLAB
-2. Open:
-
-   ```
-   s_admm_2.mlx
-   ```
-3. Update image path:
-
-   ```matlab
-   I = imread('your_image_path.jpg');
-   ```
-4. Run all sections
+<p align="center">
+  <img src="results/mse_plot.png" width="350"/>
+  <img src="results/gamma_plot.png" width="350"/>
+</p>
 
 ---
 
-## Team Members (C-14)
+## Project Summary
 
-* Jignesh Sudheer — CB.SC.U4AIE24222
-* Sharavn RM — CB.SC.U4AIE24253
-* Bhadhresh R — CB.SC.U4AIE24208
-* Gautham T — CB.SC.U4AIE24264
+| Component    | Description             |
+| ------------ | ----------------------- |
+| Problem      | Image denoising         |
+| Model        | $D = Z + X$             |
+| Method       | S-ADMM                  |
+| Optimization | Nuclear norm + sparsity |
+| Output       | Clean image + noise     |
+| Metrics      | MSE, PSNR, SSIM         |
 
 ---
 
-## Future Work
+## Computational Performance
 
-* Hyperparameter tuning for improved PSNR and SSIM
-* Faster SVD using randomized or truncated methods
-* Extension to video denoising
-* GPU-based acceleration
+* Platform : Laptop
+* Programming Language : MATLAB
+* Execution Time : ~60 seconds
+
+---
+
+## Conclusion
+
+This project implements an image denoising algorithm using the S-ADMM framework. The method effectively separates noise from the image by combining low-rank and sparse modeling. Experimental results show stable convergence and meaningful reconstruction, demonstrating the effectiveness of optimization-based denoising techniques.
+
+---
+
+## Future Plans
+
+* Improve PSNR using parameter tuning
+* Use faster SVD methods
+* Extend to video denoising
+* Compare with deep learning models
 
 ---
 
 ## References
 
-* Li, X., Wang, Y., Signal Processing (2026)
-* Boyd, S. et al., Distributed Optimization and Statistical Learning via ADMM
-* BSDS500 dataset
+* Li & Wang, Signal Processing (2026)
+* ADMM Optimization Theory
+* BSDS500 Dataset
+
+---
+
+## Repository Structure
+
+* `s_admm_2.mlx` : MATLAB implementation
+* `results/` : Output images and plots
+* `docs/` : Report / presentation
+* `README.md` : Documentation
 
 ---
