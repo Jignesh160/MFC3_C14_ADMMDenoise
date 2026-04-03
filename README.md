@@ -2,29 +2,29 @@
 
 ## 📖 Overview
 
-This project implements a **research-level optimization algorithm** for image denoising using the **Self-Adaptive Alternating Direction Method of Multipliers (S-ADMM)**.
+This project presents a **research-oriented image denoising framework** based on the **Self-Adaptive Alternating Direction Method of Multipliers (S-ADMM)**.
 
-The algorithm decomposes a noisy image into:
+The approach models a noisy image as a combination of:
 
-* **Low-rank component (clean image)**
-* **Sparse component (noise)**
+* A **low-rank component** (clean image)
+* A **sparse component** (noise)
 
-It adaptively updates parameters to improve convergence and denoising performance.
+By leveraging adaptive parameter updates, the algorithm improves both **convergence speed** and **reconstruction quality**.
 
 ---
 
 ## 🎯 Objectives
 
-* Remove noise from grayscale images using optimization techniques
+* Perform image denoising using optimization-based methods
 * Implement **Self-Adaptive ADMM (S-ADMM)**
-* Analyze convergence using MSE
-* Evaluate performance using PSNR and SSIM
+* Analyze convergence behavior using iterative metrics
+* Evaluate reconstruction quality using **MSE, PSNR, and SSIM**
 
 ---
 
 ## 🧠 Methodology
 
-The denoising model is:
+The denoising model is defined as:
 
 [
 D = Z + X
@@ -32,45 +32,54 @@ D = Z + X
 
 Where:
 
-* (D): Noisy image
-* (Z): Clean (low-rank) image
-* (X): Sparse noise
+* (D): Observed noisy image
+* (Z): Low-rank approximation (denoised image)
+* (X): Sparse noise component
 
-### Key Techniques:
+### 🔑 Core Techniques
 
-* **Singular Value Thresholding (SVT)** → Low-rank recovery
-* **ℓ₂,₁ norm shrinkage** → Sparse noise extraction
-* **Adaptive γ update** → Improves convergence
+* **Singular Value Thresholding (SVT)**
+  → Recovers low-rank structure via nuclear norm minimization
+
+* **ℓ₂,₁ Norm Shrinkage**
+  → Promotes structured sparsity in noise
+
+* **Adaptive Penalty Parameter (γ)**
+  → Dynamically updated to stabilize and accelerate convergence
 
 ---
 
 ## 📂 Dataset
 
-* **BSDS500 Dataset**
-* Images converted to grayscale and normalized
-* Synthetic Gaussian noise added
+* **BSDS500 Dataset** (Berkeley Segmentation Dataset)
+* Preprocessing steps:
+
+  * Conversion to grayscale
+  * Normalization to [0,1]
+  * Addition of synthetic Gaussian noise
 
 ---
 
 ## ⚙️ Tech Stack
 
-* MATLAB
+* **MATLAB**
 * Image Processing Toolbox
-* Linear Algebra (SVD)
+* Linear Algebra (SVD-based optimization)
 
 ---
 
-## 🚀 Implementation
+## 🚀 Implementation Pipeline
 
-1. Load and preprocess image
-2. Add Gaussian noise
-3. Initialize S-ADMM parameters
-4. Perform iterative updates:
+1. Image loading and preprocessing
+2. Noise injection (Gaussian noise)
+3. Initialization of S-ADMM parameters
+4. Iterative optimization:
 
-   * SVT (low-rank approximation)
-   * ℓ₂,₁ shrinkage (noise separation)
-5. Adaptive update of penalty parameter (γ)
-6. Stop when convergence is reached
+   * Low-rank estimation (SVT)
+   * Sparse noise extraction (ℓ₂,₁ shrinkage)
+   * Dual variable update
+   * Adaptive γ update
+5. Convergence check using tolerance criteria
 
 ---
 
@@ -80,8 +89,8 @@ Where:
 MFC3_C14_ADMMDenoise/
 │
 ├── s_admm_2.mlx        # Main MATLAB Live Script
-├── results/            # Output images & plots
-├── docs/               # Report / PPT
+├── results/            # Output images and plots
+├── docs/               # Report / Presentation
 └── README.md
 ```
 
@@ -89,52 +98,59 @@ MFC3_C14_ADMMDenoise/
 
 ## 📊 Results
 
-### 🔢 Quantitative Results
+### 🔢 Quantitative Evaluation
 
-| Metric | Value    |
-| ------ | -------- |
-| MSE    | 0.029658 |
-| PSNR   | 15.28 dB |
-| SSIM   | 0.5040   |
+| Metric | Value    | Interpretation                             |
+| ------ | -------- | ------------------------------------------ |
+| MSE    | 0.029658 | Moderate reconstruction error              |
+| PSNR   | 15.28 dB | Low signal quality (scope for improvement) |
+| SSIM   | 0.5040   | Partial structural preservation            |
 
 ---
 
-### 🖼️ Visual Results
+### 🖼️ Visual Outputs
 
-The following outputs are generated:
+The following outputs are generated and stored in the `results/` folder:
 
 * Original Image
 * Noisy Image
-* Denoised Image
-* Extracted Noise
-* Difference Image
+* Denoised Image (Low-rank component)
+* Extracted Noise (Sparse component)
+* Absolute Difference Map
 * MSE Convergence Plot
-* Gamma Evolution Plot
+* Adaptive γ Evolution Plot
 
-(All images are available in the `results/` folder)
+---
+
+## 📈 Key Observations
+
+* The algorithm successfully separates **signal and noise components**
+* Convergence behavior is stable as seen from decreasing MSE
+* Adaptive γ improves optimization flexibility
+* Performance can be further improved via parameter tuning
 
 ---
 
 ## 🧪 How to Run
 
 1. Open MATLAB
-2. Open:
+2. Open the script:
 
 ```
 s_admm_2.mlx
 ```
 
-3. Update image path:
+3. Update the image path:
 
 ```matlab
 I = imread('your_image_path.jpg');
 ```
 
-4. Run all sections
+4. Run all sections in sequence
 
 ---
 
-## 👥 C-14 Team Members
+## 👥 Team C-14 Members
 
 * **Jignesh Sudheer** — CB.SC.U4AIE24222
 * **Sharavn RM** — CB.SC.U4AIE24253
@@ -143,27 +159,27 @@ I = imread('your_image_path.jpg');
 
 ---
 
-## 📅 Timeline
+## 📅 Development Timeline
 
-* Week 1: Literature review
-* Week 2: Implementation
-* Week 3: Testing & evaluation
+* Week 1: Literature review & concept understanding
+* Week 2: MATLAB implementation of S-ADMM
+* Week 3: Testing, visualization, and evaluation
 
 ---
 
-## 🔮 Future Work
+## 🔮 Future Enhancements
 
-* Parameter tuning for improved PSNR and SSIM
-* Faster SVD using randomized methods
-* Extension to video denoising
-* GPU acceleration
+* Hyperparameter tuning for improved PSNR/SSIM
+* Fast SVD (randomized/truncated methods)
+* Extension to real-time and video denoising
+* GPU-based acceleration for scalability
 
 ---
 
 ## 📜 References
 
-* Li & Wang, *Signal Processing (2026)*
-* ADMM Optimization Techniques
+* Li, X., & Wang, Y. (2026). *Self-Adaptive ADMM for Image Denoising*. Signal Processing
+* Boyd et al., *Distributed Optimization and Statistical Learning via ADMM*
 * BSDS500 Dataset
 
 ---
