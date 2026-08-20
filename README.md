@@ -56,7 +56,7 @@ The objective of this project is to implement an S-ADMM based image denoising al
 
 ## Motivation / Why the Project is Interesting
 
-Image denoising is a fundamental problem in image processing and computer vision. Traditional filtering methods often blur important details.
+Image denoising is a fundamental problem in image processing and computer vision.Traditional filtering methods often blur important details.
 
 This project is interesting because it:
 
